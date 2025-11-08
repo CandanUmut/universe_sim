@@ -1,0 +1,11 @@
+{
+  "name": "PRU Universe",
+  "short_name": "PRUniverse",
+  "theme_color": "#0b132b",
+  "background_color": "#0b132b",
+  "display": "standalone",
+  "orientation": "portrait",
+  "description": "Gamified precomputed relational universe sandbox.",
+  "start_url": ".",
+  "icons": []
+}
