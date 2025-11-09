@@ -1,0 +1,26 @@
+[
+  {
+    "id": "spiral_tiny",
+    "name": "Tiny Spiral",
+    "description": "Ignite a compact spiral galaxy and nurture one intelligent civilization.",
+    "initialStars": 18,
+    "initialRadius": 720,
+    "cameraStart": [0.0, 0.0, 0.9]
+  },
+  {
+    "id": "nursery",
+    "name": "Star Nursery",
+    "description": "Dense stellar nursery overflowing with protostars and high energy flux.",
+    "initialStars": 24,
+    "initialRadius": 540,
+    "cameraStart": [120.0, -80.0, 1.1]
+  },
+  {
+    "id": "void_filament",
+    "name": "Void & Filaments",
+    "description": "Wide voids connected by energetic filaments. Spread civilization along the strands.",
+    "initialStars": 16,
+    "initialRadius": 820,
+    "cameraStart": [-60.0, 140.0, 0.8]
+  }
+]

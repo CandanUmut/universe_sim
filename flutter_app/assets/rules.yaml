@@ -1,0 +1,48 @@
+galaxy:
+  mass_base: 1.1
+  energy_base: 0.7
+  radial_falloff: 0.28
+  noise_amplitude: 0.32
+  center_bias:
+    x: 0.12
+    y: 0.18
+  min:
+    massDensity: 0.0
+    energyFlux: 0.0
+    habitability: 0.0
+  max:
+    massDensity: 2.5
+    energyFlux: 2.4
+    habitability: 1.8
+sector:
+  mass_base: 0.8
+  energy_base: 0.6
+  radial_falloff: 0.4
+  noise_amplitude: 0.3
+  center_bias:
+    x: 0.05
+    y: 0.08
+  min:
+    massDensity: 0.0
+    energyFlux: 0.0
+    habitability: 0.0
+  max:
+    massDensity: 2.2
+    energyFlux: 2.0
+    habitability: 1.5
+system:
+  mass_base: 0.65
+  energy_base: 0.75
+  radial_falloff: 0.55
+  noise_amplitude: 0.42
+  center_bias:
+    x: 0.03
+    y: 0.05
+  min:
+    massDensity: 0.0
+    energyFlux: 0.0
+    habitability: 0.0
+  max:
+    massDensity: 3.0
+    energyFlux: 3.0
+    habitability: 2.2
