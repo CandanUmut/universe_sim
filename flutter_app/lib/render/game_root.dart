@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flame/events.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
-import 'package:vector_math/vector_math_64.dart';
+import 'package:vector_math/vector_math_64.dart' as vm;
 
 import '../sim/pru_rules.dart';
 import '../sim/scenarios.dart';
@@ -48,7 +48,7 @@ class GameRoot extends FlameGame with PanDetector, ScaleDetector, TapDetector {
     final scenario = scenarioLibrary.scenarios.first;
     seed = UniverseSeed(masterSeed: 90210, scenario: scenario);
     final ruleSet = await PRURuleSet.load(seed!);
-    cameraController.position = Vector2(
+    cameraController.position = vm.Vector2(
       scenario.cameraStart[0],
       scenario.cameraStart[1],
     );
@@ -80,12 +80,12 @@ class GameRoot extends FlameGame with PanDetector, ScaleDetector, TapDetector {
 
   @override
   void onPanStart(DragStartInfo info) {
-    cameraController.onPanStart(info.raw, Vector2(size.x, size.y));
+    cameraController.onPanStart(info.raw, vm.Vector2(size.x, size.y));
   }
 
   @override
   void onPanUpdate(DragUpdateInfo info) {
-    cameraController.onPanUpdate(info.raw, Vector2(size.x, size.y));
+    cameraController.onPanUpdate(info.raw, vm.Vector2(size.x, size.y));
   }
 
   @override
@@ -100,13 +100,13 @@ class GameRoot extends FlameGame with PanDetector, ScaleDetector, TapDetector {
 
   @override
   void onTapUp(TapUpInfo info) {
-    final screenSize = Vector2(size.x, size.y);
-    final world = cameraController.screenToWorld(info.eventPosition.global.toVector2(), screenSize);
+    final vm.Vector2 screenSize = vm.Vector2(size.x, size.y);
+    final vm.Vector2 world = cameraController.screenToWorld(info.eventPosition.global.toVector2(), screenSize);
     selected = _nearestEntity(world);
     selectedNotifier.value = selected;
   }
 
-  EntitySnapshot? _nearestEntity(Vector2 position) {
+  EntitySnapshot? _nearestEntity(vm.Vector2 position) {
     EntitySnapshot? nearest;
     var bestDist = double.infinity;
     for (final entity in _entities) {
@@ -126,7 +126,7 @@ class GameRoot extends FlameGame with PanDetector, ScaleDetector, TapDetector {
     overlayNotifier.value = mode;
   }
 
-  void placeStar(Vector2 position) {
+  void placeStar(vm.Vector2 position) {
     _sim?.sendCommand('placeStar', {'x': position.x, 'y': position.y});
   }
 

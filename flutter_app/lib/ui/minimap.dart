@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:vector_math/vector_math_64.dart';
+import 'package:vector_math/vector_math_64.dart' as vm;
 
 import '../render/style.dart';
 import '../sim/sim_isolate.dart';
@@ -10,7 +10,7 @@ class Minimap extends StatelessWidget {
   const Minimap({super.key, required this.snapshot, required this.onFocus});
 
   final SimSnapshot? snapshot;
-  final ValueChanged<Vector2> onFocus;
+  final ValueChanged<vm.Vector2> onFocus;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,7 @@ class Minimap extends StatelessWidget {
             }
             final local = details.localPosition;
             final center = const Offset(90, 90);
-            final world = Vector2(
+            final vm.Vector2 world = vm.Vector2(
               (local.dx - center.dx) * 20,
               (local.dy - center.dy) * 20,
             );

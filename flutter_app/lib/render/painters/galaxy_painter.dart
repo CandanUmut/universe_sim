@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'package:flutter/painting.dart' show RadialGradient;
+
 import '../../sim/sim_isolate.dart';
 import '../style.dart';
 
