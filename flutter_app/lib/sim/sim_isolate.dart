@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:isolate';
 
+import 'package:flutter/foundation.dart';
+
 import 'package:vector_math/vector_math_64.dart';
 
 import 'components/biosphere.dart';
@@ -72,8 +74,14 @@ class SimController {
   ReceivePort? _receivePort;
   ReceivePort? _snapshotReceivePort;
   Isolate? _isolate;
+  SimState? _localState;
+  Timer? _localTimer;
 
   Future<void> start() async {
+    if (kIsWeb) {
+      _startInMainIsolate();
+      return;
+    }
     final receivePort = ReceivePort();
     _receivePort = receivePort;
     _isolate = await Isolate.spawn(_entryPoint, receivePort.sendPort);
@@ -90,14 +98,42 @@ class SimController {
   }
 
   void sendCommand(String command, dynamic payload) {
-    _sendPort?.send(SimCommandMessage(command, payload));
+    if (_localState != null) {
+      _handleCommand(_localState, SimCommandMessage(command, payload));
+      _emitLocalSnapshot();
+    } else {
+      _sendPort?.send(SimCommandMessage(command, payload));
+    }
   }
 
   Future<void> dispose() async {
+    _localTimer?.cancel();
+    _localTimer = null;
     await _snapshots.close();
+    _localState = null;
     _receivePort?.close();
     _snapshotReceivePort?.close();
     _isolate?.kill(priority: Isolate.immediate);
+  }
+
+  void _startInMainIsolate() {
+    final state = _createInitialState(seed, ruleSet);
+    _localState = state;
+    _emitLocalSnapshot();
+    _localTimer = Timer.periodic(const Duration(milliseconds: 33), (_) {
+      if (_snapshots.isClosed) {
+        return;
+      }
+      _snapshots.add(_stepSimulation(state));
+    });
+  }
+
+  void _emitLocalSnapshot() {
+    final state = _localState;
+    if (state == null || _snapshots.isClosed) {
+      return;
+    }
+    _snapshots.add(_buildSnapshot(state));
   }
 }
 
@@ -105,21 +141,27 @@ void _entryPoint(SendPort primaryPort) {
   final commandPort = ReceivePort();
   primaryPort.send(commandPort.sendPort);
 
-  late SendPort snapshotPort;
+  SendPort? snapshotPort;
   SimState? state;
   Timer? timer;
 
   commandPort.listen((dynamic message) {
     if (message is SendPort) {
       snapshotPort = message;
+      if (state != null) {
+        snapshotPort!.send(_buildSnapshot(state!));
+      }
     } else if (message is SimInitMessage) {
       final rules = PRURuleSet(seed: message.seed.rulesSeed, rules: message.rules);
-      final grid = UniverseGrid(rules: rules);
-      state = SimState(seed: message.seed, grid: grid);
-      WorldBuilder(state!).populateInitial();
+      state = _createInitialState(message.seed, rules);
+      if (snapshotPort != null) {
+        snapshotPort!.send(_buildSnapshot(state!));
+      }
       timer?.cancel();
       timer = Timer.periodic(const Duration(milliseconds: 33), (_) {
-        _tick(state!, snapshotPort);
+        if (snapshotPort != null) {
+          snapshotPort!.send(_stepSimulation(state!));
+        }
       });
     } else if (message is SimCommandMessage) {
       _handleCommand(state, message);
@@ -161,9 +203,20 @@ void _handleCommand(SimState? state, SimCommandMessage message) {
   }
 }
 
-void _tick(SimState state, SendPort port) {
+SimState _createInitialState(UniverseSeed seed, PRURuleSet rules) {
+  final grid = UniverseGrid(rules: rules);
+  final state = SimState(seed: seed, grid: grid);
+  WorldBuilder(state).populateInitial();
+  return state;
+}
+
+SimSnapshot _stepSimulation(SimState state) {
   const dt = 1 / 30;
   state.update(dt);
+  return _buildSnapshot(state);
+}
+
+SimSnapshot _buildSnapshot(SimState state) {
   final entities = <EntitySnapshot>[];
   for (final entry in state.transforms.entries) {
     final id = entry.key;
@@ -178,7 +231,7 @@ void _tick(SimState state, SendPort port) {
       extra: extra,
     ));
   }
-  port.send(SimSnapshot(
+  return SimSnapshot(
     time: state.elapsedTime,
     entities: entities,
     starlight: state.starlight,
@@ -187,7 +240,7 @@ void _tick(SimState state, SendPort port) {
       'starlight': state.starlight,
       'order': state.order,
     },
-  ));
+  );
 }
 
 String _entityType(SimState state, int id) {
