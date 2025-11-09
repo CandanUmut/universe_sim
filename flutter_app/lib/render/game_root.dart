@@ -76,6 +76,19 @@ class GameRoot extends FlameGame with PanDetector, ScaleDetector, TapDetector {
     galaxyPainter.paint(canvas, _entities, cameraController.zoom);
     systemPainter.paint(canvas, _entities, cameraController.zoom);
     overlayPainter.paint(canvas, _entities, overlayMode, cameraController.zoom);
+    if (selected != null) {
+      final highlightPaint = Paint()
+        ..color = const Color(0xFFFFFFFF)
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 2 / cameraController.zoom;
+      final glowPaint = Paint()
+        ..color = const Color(0x66FFFFFF)
+        ..style = PaintingStyle.fill;
+      final radius = 10 / cameraController.zoom;
+      final center = Offset(selected!.x, selected!.y);
+      canvas.drawCircle(center, radius, glowPaint);
+      canvas.drawCircle(center, radius, highlightPaint);
+    }
     canvas.restore();
   }
 
