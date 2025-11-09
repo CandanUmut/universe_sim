@@ -1,27 +1,27 @@
 import 'package:flame/extensions.dart';
 import 'package:flutter/gestures.dart';
-import 'package:vector_math/vector_math_64.dart';
+import 'package:vector_math/vector_math_64.dart' as vm;
 
 class CameraController {
   double zoom = 1.0;
-  Vector2 position = Vector2.zero();
-  Vector2? _lastPan;
+  vm.Vector2 position = vm.Vector2.zero();
+  vm.Vector2? _lastPan;
 
-  Vector2 screenToWorld(Vector2 screenPosition, Vector2 screenSize) {
+  vm.Vector2 screenToWorld(vm.Vector2 screenPosition, vm.Vector2 screenSize) {
     final centered = screenPosition - screenSize / 2;
     final world = centered / zoom + position;
     return world;
   }
 
-  void onPanStart(DragStartDetails details, Vector2 screenSize) {
+  void onPanStart(DragStartDetails details, vm.Vector2 screenSize) {
     _lastPan = details.localPosition.toVector2();
   }
 
-  void onPanUpdate(DragUpdateDetails details, Vector2 screenSize) {
-    final current = details.localPosition.toVector2();
-    final last = _lastPan;
+  void onPanUpdate(DragUpdateDetails details, vm.Vector2 screenSize) {
+    final vm.Vector2 current = details.localPosition.toVector2();
+    final vm.Vector2? last = _lastPan;
     if (last != null) {
-      final delta = current - last;
+      final vm.Vector2 delta = current - last;
       position -= delta / zoom;
     }
     _lastPan = current;
@@ -35,7 +35,7 @@ class CameraController {
     zoom = (zoom * details.scale).clamp(0.2, 6.0);
   }
 
-  void focus(Vector2 target) {
+  void focus(vm.Vector2 target) {
     position = target.clone();
   }
 }

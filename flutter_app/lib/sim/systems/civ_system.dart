@@ -31,7 +31,7 @@ class CivSystem extends SimSystem {
 
     for (final relayEntry in state.relays.entries) {
       final relay = relayEntry.value;
-      relay.cooldown = math.max(0, relay.cooldown - dt);
+      relay.cooldown = math.max(0.0, relay.cooldown - dt);
     }
   }
 

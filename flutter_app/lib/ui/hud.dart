@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:vector_math/vector_math_64.dart';
+import 'package:vector_math/vector_math_64.dart' as vm;
 
 import '../render/game_root.dart';
 import '../render/painters/overlays.dart';
@@ -25,7 +25,7 @@ class HudOverlay extends StatelessWidget {
           left: 16,
           bottom: 16,
           child: BuildMenu(
-            onPlaceStar: (Vector2 pos) => game.placeStar(pos),
+            onPlaceStar: (vm.Vector2 pos) => game.placeStar(pos),
             onSeedLife: (entityId) => game.seedLife(entityId),
             onBuildRelay: (entityId) => game.buildRelay(entityId),
             game: game,
@@ -67,7 +67,7 @@ class HudOverlay extends StatelessWidget {
             builder: (context, snapshot, _) {
               return Minimap(
                 snapshot: snapshot,
-                onFocus: (Vector2 pos) => game.cameraController.focus(pos),
+                onFocus: (vm.Vector2 pos) => game.cameraController.focus(pos),
               );
             },
           ),

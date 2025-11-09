@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:vector_math/vector_math_64.dart';
+import 'package:vector_math/vector_math_64.dart' as vm;
 
 import '../render/game_root.dart';
 
@@ -12,7 +12,7 @@ class BuildMenu extends StatelessWidget {
     required this.game,
   });
 
-  final void Function(Vector2 position) onPlaceStar;
+  final void Function(vm.Vector2 position) onPlaceStar;
   final void Function(int entityId) onSeedLife;
   final void Function(int entityId) onBuildRelay;
   final GameRoot game;

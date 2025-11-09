@@ -42,7 +42,7 @@ class WorldBuilder {
     state.transforms[id] = TransformComponent(position: position, velocity: Vector2.zero());
     state.stars[id] = StarComponent(
       luminosity: 1.0 + rng.nextDouble01() * 1.5,
-      temperature: 4500 + rng.nextRange(0, 2000),
+      temperature: 4500.0 + rng.nextRange(0, 2000),
     );
   }
 }

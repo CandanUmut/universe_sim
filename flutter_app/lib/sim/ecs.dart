@@ -30,13 +30,13 @@ class SimState {
       : entities = <EntityId>{},
         rng = SeededRng(seed.entitySeed),
         sampler = PRUSampler(grid),
-        transforms = ComponentMap<EntityId, TransformComponent>(),
-        orbits = ComponentMap<EntityId, OrbitComponent>(),
-        stars = ComponentMap<EntityId, StarComponent>(),
-        planets = ComponentMap<EntityId, PlanetComponent>(),
-        biospheres = ComponentMap<EntityId, BiosphereComponent>(),
-        civilizations = ComponentMap<EntityId, CivilizationComponent>(),
-        relays = ComponentMap<EntityId, RelayComponent>(),
+        transforms = ComponentMap<TransformComponent>(),
+        orbits = ComponentMap<OrbitComponent>(),
+        stars = ComponentMap<StarComponent>(),
+        planets = ComponentMap<PlanetComponent>(),
+        biospheres = ComponentMap<BiosphereComponent>(),
+        civilizations = ComponentMap<CivilizationComponent>(),
+        relays = ComponentMap<RelayComponent>(),
         _idHasher = IdHasher(seed.entitySeed),
         systems = [] {
     systems.addAll([
@@ -53,13 +53,13 @@ class SimState {
   final Set<EntityId> entities;
   final SeededRng rng;
   final PRUSampler sampler;
-  final ComponentMap<EntityId, TransformComponent> transforms;
-  final ComponentMap<EntityId, OrbitComponent> orbits;
-  final ComponentMap<EntityId, StarComponent> stars;
-  final ComponentMap<EntityId, PlanetComponent> planets;
-  final ComponentMap<EntityId, BiosphereComponent> biospheres;
-  final ComponentMap<EntityId, CivilizationComponent> civilizations;
-  final ComponentMap<EntityId, RelayComponent> relays;
+  final ComponentMap<TransformComponent> transforms;
+  final ComponentMap<OrbitComponent> orbits;
+  final ComponentMap<StarComponent> stars;
+  final ComponentMap<PlanetComponent> planets;
+  final ComponentMap<BiosphereComponent> biospheres;
+  final ComponentMap<CivilizationComponent> civilizations;
+  final ComponentMap<RelayComponent> relays;
   final List<SimSystem> systems;
   final IdHasher _idHasher;
   int _entityIndex = 0;

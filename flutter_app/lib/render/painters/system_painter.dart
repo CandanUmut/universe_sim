@@ -33,6 +33,6 @@ class SystemPainter {
       ..color = PRUStyle.planet.withOpacity(0.2)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 0.5;
-    canvas.drawCircle(origin, radius);
+    canvas.drawCircle(origin, radius, orbitPaint);
   }
 }
